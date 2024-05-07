@@ -25,6 +25,8 @@ conn.sync({force: false}).then(() => {
   }).catch((err) => {
     console.log("error al sincronizar la base de datos", err);
   });
+  
+
 
 
   
