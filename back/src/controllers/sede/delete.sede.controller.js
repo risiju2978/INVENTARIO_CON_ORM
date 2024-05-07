@@ -1,14 +1,24 @@
+const sedeModels = require("../../models/sede.models");
+
 const deleteSede = async (req, res) => {
     try {
       const { campus_id } = req.params;
-      const [result] = await db.promise().execute('DELETE FROM sede WHERE campus_id = ?', [campus_id]);
+      if (!campus_id) {
+        return res.status(400).json({
+            status: 400,
+            error: "Faltan campos obligatorios",
+        });
+    };
 
-      if (result.affectedRows === 0) {
+    const resultado = await sedeModels.DeleteSede(campus_id);
+  
+
+      if (resultado.affectedRows === 0) {
         return res.status(404).json({ 
             status: 404,
              error: 'Sede no encontrada'
              });
-      }
+      };
 
       res.status(200).json({
          status: 200,

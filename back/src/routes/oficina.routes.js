@@ -1,7 +1,7 @@
 
 const express = require('express');
 const oficinaRouter = express.Router();
-const oficinaCRUD = require('../services/oficina/oficinaControllers/oficinaCRUD');
+const oficinaCRUD = require("../controllers/oficina/index.oficina.controller")
 
 // Rutas
 oficinaRouter.get('/getAllOficinas', oficinaCRUD.getAllOficinas);

@@ -1,5 +1,5 @@
 
-const GeneratorInfoController = require ('../services/articulo/artControllers/artGeneratorInfoController');
+const GeneratorInfoController = require ('../controllers/articulo.generator.info/index.articulo.generator.info.controller.js');
 const express = require("express")
 const generatorInfoRouter = express.Router();
 

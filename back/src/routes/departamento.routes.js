@@ -1,4 +1,4 @@
-const departamentoCRUD = require ('../services/departamento/departamentoControllers/departamentoCRUD');
+const departamentoCRUD = require("../controllers/departamento/index.departamento.controller");
 const express = require("express");
 const departamentoRouter = express.Router();
 

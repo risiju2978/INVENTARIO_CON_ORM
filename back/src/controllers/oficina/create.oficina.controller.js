@@ -1,12 +1,29 @@
+const oficinaModels = require("../../models/oficina.models");
+
  const createOficina = async (req, res) => {
     try {
       const { departament_id, office } = req.body;
-      const [result] = await db.promise().query('INSERT INTO oficina (departament_id, office) VALUES (?, ?)', [departament_id, office]);
+
+      if (!departament_id && !office) {
+        return res.status(400).json({
+            status: 400,
+            error: "Faltan campos obligatorios",
+        });
+    };
+      const resultado =  await oficinaModels.CrearOficina(departament_id, office);
+
+     
+      if (resultado.affectedRows === 0) { 
+        return res.status(404).json({ 
+            status: 404,
+            error: 'oficina no fue creada' 
+        });
+    };
 
       res.status(201).json({
         status: 201,
         message: 'Oficina creada correctamente',
-        data: { office_id: result.insertId },
+        data: { office_id: resultado.insertId },
       });
     } catch (error) {
       console.error(error);

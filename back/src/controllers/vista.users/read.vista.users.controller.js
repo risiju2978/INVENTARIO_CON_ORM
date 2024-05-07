@@ -1,9 +1,19 @@
+const vistaUsersModels = require("../../models/vista.users.models");
+
 const readVistaUsers = async (req, res) => {
     try {
-      const [vistaUserData] = await db.promise().query('CALL Read_Users()');
+
+      const resultado = await vistaUsersModels.VistaUsers();
+      if(resultado.length === 0){
+        return res.status(404).json({
+          status: 404,
+          error: "no se encontro la vista de usuarios"
+        });
+      };
+
       res.status(200).json({
         status: 200,
-        data: vistaUserData[0], // Devuelve los resultados del SP (en el primer índice del array)
+        data: resultado, // Devuelve los resultados del SP (en el primer índice del array)
       });
     } catch (error) {
       console.error('Error al llamar al SP Read_Users:', error);

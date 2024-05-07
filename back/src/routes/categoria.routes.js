@@ -1,5 +1,5 @@
 
-const categoriaCRUD = require ('../services/categoria/categoriaControllers/categoriaCRUD');
+const categoriaCRUD = require("../controllers/categoria/index.categoria.controller")
 const express = require("express");
 
 const categoriaRouter = express.Router();

@@ -1,12 +1,13 @@
-const { db } = require("../../../../utils/utils.helpers");
+const { db } = require("../../database/conexion");
+
 const PDFDocument = require("pdfkit");
 const mysql = require("mysql2/promise");
 const excel = require("excel4node");
 const fs = require("fs");
 const path = require("path");
-const buildPDF = require("../../../../utils/utils.pdfBuild");
-const obtenerDatosInforme = require("../../../helpers/obtenerDatosInforme");
-const buildExcel = require("../../../../utils/utils.excelBuild");
+const buildPDF = require("../../../utils/utils.pdfBuild");
+const obtenerDatosInforme = require("../../helpers/obtenerDatosInforme");
+
 
 
 
@@ -36,6 +37,7 @@ const generarReporteGeneralPDF = async (req, res) => {
         // Ejecutar la consulta
         [datos] = await db.promise().execute(sql, combo);
         datosParaEnviarAConstruirPDF = datos;
+        
       } else if (activo === undefined || activo === null) {
         [datos] = await db.promise().query("CALL Read_v_infogenerator()");
         // const datos = await obtenerDatosInforme();

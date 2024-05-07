@@ -1,10 +1,19 @@
+const categoriaModels = require("../../models/categoria.models");
+
 const getCategoriaById = async (req, res) => {
     try {
       const { categoria_id} = req.body;
-      const sql = "SELECT * FROM categoria WHERE categoria_id = ?";
-      const [categoria] = await db.promise().query(sql, [categoria_id]);
+      if ( !categoria_id ) {
+        return res.status(400).json({
+          status: 400,
+          error: "Faltan campos obligatorios",
+        });
+      }
 
-      if (categoria.length === 0) {
+      const resultado = await categoriaModels.ListarCategoriaByID(categoria_id);
+  
+
+      if (resultado.length === 0) {
         return res.status(404).json({
              status: 404,
               error: "Categoría no encontrada" });
@@ -12,7 +21,7 @@ const getCategoriaById = async (req, res) => {
 
       res.status(200).json({
          status: 200, 
-         data: categoria[0] });
+         data: resultado });
     } catch (error) {
       console.error(error);
       res.status(500).json({

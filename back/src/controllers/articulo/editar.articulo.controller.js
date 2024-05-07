@@ -1,6 +1,5 @@
-const fs = require("fs");
-const path = require("path");
-const { request } = require("express");
+
+const articuloModels = require("../../models/articulo.models");
 
 
 const editArticulo = async (req, res) => {
@@ -18,41 +17,15 @@ const editArticulo = async (req, res) => {
       const imgArticulo = req.file;
       console.log(imgArticulo)
 
-      db.beginTransaction((error) => {
-        if (error) {
-          throw error;
-        }
+ // Validación de campos obligatorios para editar en la tabla 
+ if (!id_articulo || !anio || !dimension || !art_num  || !art_nombre || !art_codigo || !art_glosa ) {
+  return res.status(400).json({
+    status: 400,
+    error:
+      "Faltan campos obligatorios para editar el articulo",
+  });
+}
 
-        // Validar campos obligatorios para editar en la tabla articulo
-        // if (
-        //   !id_articulo ||
-        //   !anio ||
-        //   !dimension ||
-        //   !art_num ||
-        //   !art_nombre ||
-        //   !art_codigo ||
-        //   !art_glosa ||
-        //   !imgArticulo
-        // ) {
-        //   return res.status(400).json({
-        //     status: 400,
-        //     error:
-        //       "Faltan campos obligatorios para editar en la tabla articulo",
-        //   });
-        // }
-            // Actualizar en articulo_detalle
-            const sqlArticuloDetalle = `
-                UPDATE articulo_detalle
-                SET
-                  anio = ?,
-                  dimension = ?,
-                  art_num = ?,
-                  art_nombre = ?,
-                  art_codigo = ?,
-                  art_glosa = ?,
-                  art_image_path = ?
-                WHERE id_articulo = ?
-              `;
 
             const dataUpdateArticuloDetalle = [
               anio,
@@ -65,36 +38,22 @@ const editArticulo = async (req, res) => {
               id_articulo,
             ];
 
-            // Actualizar el detalle del artículo
-            db.query(
-              sqlArticuloDetalle,
-              dataUpdateArticuloDetalle,
-              (error, result, field) => {
-                // si falla la actualización
-                if (error) {
-                  return db.rollback(() => {
-                    throw error;
-                  });
-                }
+            const resultado = await articuloModels.EditarArticulo(dataUpdateArticuloDetalle);
 
-                // si la actualización tiene éxito, hago un commit
-                db.commit((error) => {
-                  if (error) {
-                    return db.rollback(() => {
-                      throw error;
-                    });
-                  }
+            if (resultado.affectedRows === 0) { 
+              return res.status(404).json({ 
+                  status: 404,
+                  error: 'articulo no fue editado' 
+              });
+          };
 
-                  res.status(200).json({
-                    status: 200,
-                    message: "Artículo editado correctamente",
-                  });
-                });
-              }
-            );
-          
-        
-      });
+
+            res.status(200).json({
+              status: 200,
+              data: { id_articulo: resultado.insertId },
+              message: "Articulo editado correctamente",
+            });
+
     } catch (error) {
       console.error(error);
       res.status(500).json({

@@ -1,5 +1,4 @@
 require("dotenv").config();
-const {db} =require("../../../../utils/utils.helpers");
 const { createCategoria } = require("./create.categoria.controller");
 const { deleteCategoria } = require("./delete.categoria.controller");
 const { getCategoriaById } = require("./get.categorias.by.id.controller");

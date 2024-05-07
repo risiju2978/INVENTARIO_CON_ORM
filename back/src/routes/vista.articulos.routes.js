@@ -1,6 +1,6 @@
 const express = require('express');
 const vistaRouter = express.Router();
-const vistaController = require('../services/V_InfoGenerator/V_Controllers/V_Controller');
+const vistaController = require('../controllers/vista.info.generator/index.vista.info.generator.controller');
 
 // Rutas
 vistaRouter.get('/readVista', vistaController.readVista);

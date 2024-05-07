@@ -1,7 +1,7 @@
 
 
 
-const articuloEstadoCRUD = require ('../services/articulo_estado/articuloEstadoControllers/articuloEstadoCRUD');
+const articuloEstadoCRUD = require("../controllers/articulo.estado/index.articulo.estado.controller");
 const express = require("express");
 const articuloEstadoRouter = express.Router();
 

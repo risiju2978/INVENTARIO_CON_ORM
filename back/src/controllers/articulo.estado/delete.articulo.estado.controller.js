@@ -1,9 +1,19 @@
+const articuloEstadoModels = require("../../models/articulo.estado.models");
+
 const deleteArticuloEstado = async (req, res) => {
     try {
       const {articulo_estado_id } = req.body;
-      const [result] = await db.promise().query("DELETE FROM articulo_estado WHERE articulo_estado_id = ?", [articulo_estado_id]);
 
-      if (result.affectedRows === 0) {
+      if (!articulo_estado_id  ) {
+        return res.status(400).json({
+            status: 400,
+            error: "Faltan campos obligatorios",
+        });
+    };
+    
+    const resultado = await articuloEstadoModels.DeleteArticuloEstado(articulo_estado_id);
+
+      if (resultado.affectedRows === 0) {
         return res.status(404).json({
              status: 404,
               error: "Estado de artículo no encontrado" });

@@ -1,6 +1,8 @@
+
 const fs = require("fs");
 const path = require("path");
 const { request } = require("express");
+const articuloModels = require("../../models/articulo.models");
 
 const incomeArticulo = async (req = request, res) => {
     try {
@@ -18,7 +20,7 @@ const incomeArticulo = async (req = request, res) => {
       } = req.body;
 
       const imgArticulo = req.file;
-      console.log(req.file)
+     
 
 
       // Validación de campos obligatorios para insertar en la tabla articulo
@@ -29,52 +31,18 @@ const incomeArticulo = async (req = request, res) => {
             "Faltan campos obligatorios para insertar en la tabla articulo",
         });
       }
+// data del ingreso de articulo 
+      const dataInsertArticulo = [
+        articulo_estado_id,
+        categoria_id,
+        usuario_id,
+        office_id,
+      ];
 
-      // Iniciar transacción
-      db.beginTransaction(async (error) => {
-        if (error) {
-          throw error;
-        }
 
-        try {
-          // 1. Insertar en la tabla articulo
-          const sqlArticulo = `
-          INSERT INTO articulo (
-            articulo_estado_id,
-            categoria_id,
-            usuario_id,
-            office_id
-          ) VALUES (?, ?, ?, ?)`;
-
-          const dataInsertArticulo = [
-            articulo_estado_id,
-            categoria_id,
-            usuario_id,
-            office_id,
-          ];
-
-          const [resultArticulo] = await db
-            .promise()
-            .query(sqlArticulo, dataInsertArticulo);
-
-          const id_articulo = resultArticulo.insertId;
-
-          // 3. Insertar en la tabla articulo_detalle
-          const sqlArticuloDetalle = `
-            INSERT INTO articulo_detalle (
-              id_articulo,
-              anio,
-              dimension,
-              art_num,
-              art_nombre,
-              art_codigo,
-              art_ingreso,
-              art_glosa,
-              art_image_path
-            ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)`;
-
+      //array de ingreso para articulo detalle
           const dataInsertArticuloDetalle = [
-            id_articulo,
+            //id_articulo,
             anio,
             dimension,
             art_num,
@@ -85,32 +53,23 @@ const incomeArticulo = async (req = request, res) => {
             art_image_path = imgArticulo === undefined ? "uploads/public/image.png" : imgArticulo.path, // Guardamos la ruta del archivo en la base de datos
           ];
 
-          await db
-            .promise()
-            .query(sqlArticuloDetalle, dataInsertArticuloDetalle);
+          const resultados = await articuloModels.insertarArticuloYDetalle( dataInsertArticulo , dataInsertArticuloDetalle);
 
-          // Hacer commit si todo fue exitoso
-          db.commit((error) => {
-            if (error) {
-              return db.rollback(() => {
-                console.log("error en el commit");
-                throw new Error();
-              });
-            }
 
-            res.status(200).json({
-              status: 200,
-              message: "Artículo creado correctamente",
+          if (resultados.affectedRows === 0) { 
+            return res.status(404).json({ 
+                status: 404,
+                error: 'articulo no fue creado' 
             });
-          });
-        } catch (error) {
-          // Si hay un error, hacer rollback
-          console.log("error en la transacción", error);
-          db.rollback(() => {
-            throw new Error();
-          });
-        }
-      });
+        };
+           
+            res.status(201).json({
+              status: 201,
+              data: {id_articulo: resultados.articulo.insertId},
+              message: "Artículo creado correctamente",
+
+            });
+
     } catch (error) {
       console.error(error);
       res.status(500).json({

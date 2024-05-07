@@ -1,4 +1,5 @@
-
+const bcrypt = require("bcrypt");
+const userModels = require("../../models/user.models");
 
 const editarUsuario = async (req, res) => {
     try {
@@ -11,10 +12,9 @@ const editarUsuario = async (req, res) => {
       }
   
       // Verificar si el usuario existe
-      const sqlUserCheck = "SELECT user_id FROM usuario WHERE user_id = ?";
-      const [userCheck] = await db.promise().query(sqlUserCheck, [user_id]);
-  
-      if (userCheck.length === 0) {
+      const CheckUser = await userModels.UserCheck(user_id);
+
+      if (CheckUser.length === 0) {
         return res.status(404).json({ status: 404, error: "No existe usuario" });
       }
   
@@ -23,13 +23,14 @@ const editarUsuario = async (req, res) => {
       const passWordEncripted = bcrypt.hashSync(password, salt);
   
       // Actualizar datos de usuario con la contraseña encriptada
-      const sqlUpdate = "UPDATE usuario SET username=?, email=?, password=? WHERE user_id=?";
       const data = [username, email, passWordEncripted, user_id];
   
+
+   
       // Ejecutar la actualización
-      const [resultUpdate] = await db.promise().query(sqlUpdate, data);
+      const resultado = await userModels.EditarUsuario(data);
   
-      if (resultUpdate.affectedRows > 0) {
+      if (resultado.affectedRows > 0) {
         return res.status(200).json({ status: 200, message: "Usuario actualizado correctamente" });
       } else {
         return res.status(401).json({ status: 401, error: "Error al actualizar" });

@@ -1,5 +1,5 @@
 
-const sedeCRUD = require ('../services/sede/sedeControllers/sedeCRUD');
+const sedeCRUD = require ("../controllers/sede/index.sede.controller.js");
 const express = require("express");
 
 const sedeRouter = express.Router();

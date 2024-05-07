@@ -1,4 +1,5 @@
 require("dotenv").config();
+
 const bcrypt = require("bcrypt");
 
 
@@ -10,7 +11,6 @@ const { editarRolUsuario } = require("./editar.rol.user.controller");
 const { editarUsuario } = require("./editar.user.controller");
 const { getInfoUser } = require("./get.info.user.controller");
 const { editarPasswordUsuario } = require("./editar.password.user.controller");
-const { db } = require("../../database/conexion");
 
 
 
