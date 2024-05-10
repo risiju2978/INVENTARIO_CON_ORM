@@ -1,5 +1,4 @@
 require("dotenv").config();
-const {db} =require("../../../../utils/utils.helpers");
 const { createArticuloEstado } = require("./create.articulo.estado.controller");
 const { deleteArticuloEstado } = require("./delete.articulo.estado.controller");
 const { getArticuloEstadoById } = require("./get.articulo.estado.by.id.controller");

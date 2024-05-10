@@ -20,7 +20,7 @@ const ButtonDescargar = ({ url, tipo, margenTop, marginLeft }) => {
   };
   return (
     <>
-      <fomr>
+      <form>
         <div className="d-flex flex-column">
           <button
             type="button"
@@ -37,11 +37,10 @@ const ButtonDescargar = ({ url, tipo, margenTop, marginLeft }) => {
               <option value={"todos"}>Todos</option>
               <option value={"3"}>Activos</option>
               <option value={"1"}>Inactivos</option>
-            </select>
-       
+            </select> 
           </div>
         </div>
-      </fomr>
+      </form>
     </>
   );
 };

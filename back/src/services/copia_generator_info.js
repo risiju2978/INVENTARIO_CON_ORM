@@ -1,11 +1,11 @@
 require("dotenv").config();
-const { db } = require("../../../../utils/utils.helpers");
+
 const PDFDocument = require("pdfkit");
 const mysql = require("mysql2/promise");
 const Excel = require("excel4node");
 const fs = require("fs");
 const path = require("path");
-const  buildPDF  = require("../../../../utils/utils.pdfBuild");
+
 
 const infGeneratorController = {
   generarInforme: async (req, res) => {

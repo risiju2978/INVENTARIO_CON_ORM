@@ -1,5 +1,4 @@
 require("dotenv").config();
-const {db} =require("../../../../utils/utils.helpers");
 const { createDepartamento } = require("./create.departamento.controller");
 const { deleteDepartamento } = require("./delete.departamento.controller");
 const { getAllDepartamentos } = require("./get.all.departamentos.controller");

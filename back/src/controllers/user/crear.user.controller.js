@@ -9,8 +9,7 @@ const userModels = require("../../models/user.models");
 const crearUsuario = async (req, res) => {
     try {
       // Datos del cuerpo de la solicitud
-      const { username, email, campus_id, rol_id, user_state, password } =
-        req.body;
+      const { username, email, campus_id, rol_id, user_state, password } =req.body;
 
       // Verificar si todos los campos necesarios están
       //tuve que cambiar user_state para que valide que tenga un valor porque si solo compruebo si es falso no me acepta el 0 pero con undefinied sirve aunque hay que verificar que no sea null
@@ -31,7 +30,6 @@ const crearUsuario = async (req, res) => {
 
       const resultados = await userModels.crearUser(username, email, campus_id, rol_id, user_state, password )
 
-      
       if(resultados){
         return res.status(400).json({
           status: 400,

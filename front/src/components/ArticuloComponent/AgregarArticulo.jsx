@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from "react";
-import axios from "axios";
 import { Api } from "../../api/api";
 
 const AgregarArticulo = ({ idUser, limpiar }) => {

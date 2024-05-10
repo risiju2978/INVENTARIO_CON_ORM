@@ -1,9 +1,19 @@
+const vistaInfoGeneratorModels = require("../../models/vista.info.generator.models");
+
 const readVista= async (req, res) => {
     try {
-      const [vistaData] = await db.promise().query('CALL Read_v_infogenerator()');
+
+      const resultado = await vistaInfoGeneratorModels.VistaInfoGenerator();
+      if(resultado.length === 0){
+        return res.status(404).json({
+          status: 404,
+          error: "no se encontro la vista"
+        });
+      };
+
       res.status(200).json({
         status: 200,
-        data: vistaData[0], // Devuelve los resultados del SP (en el primer índice del array)
+        data: resultado, // Devuelve los resultados del SP (en el primer índice del array)
       });
     } catch (error) {
       console.error('Error al llamar al SP Read_v_infogenerator:', error);

@@ -1,7 +1,7 @@
 
 
 const upload = require('../middlewares/upload-files');
-const artController = require ('../services/articulo/artControllers/artController');
+const artController = require("../controllers/articulo/index.articulo.controller");
 const express = require("express");
 const artRouter = express.Router();
 

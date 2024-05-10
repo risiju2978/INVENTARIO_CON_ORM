@@ -1,11 +1,21 @@
+const departamentoModels = require("../../models/departamento.models");
+
 const deleteDepartamento =  async (req, res) => {
     try {
       const { departament_id } = req.params;
 
-      const [result] = await db.promise().execute('DELETE FROM departamento WHERE departament_id = ?', [departament_id]);
-      console.log(result)
+      if (!departament_id  ) {
+        return res.status(400).json({
+            status: 400,
+            error: "Faltan campos obligatorios",
+        });
+    };
 
-      if (result.affectedRows === 0) {
+    const resultado = await departamentoModels.DeleteDepartamento(departament_id);
+    
+  
+
+      if (resultado.affectedRows === 0) {
         return res.status(404).json({
              status: 404, 
              error: 'Departamento no encontrado'

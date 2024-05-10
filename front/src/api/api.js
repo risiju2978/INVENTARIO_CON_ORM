@@ -20,10 +20,12 @@ export class Api {
   }
 
   static async login(username, password) {
+    console.log(username, password)
     const response = await axios.post(`${url}/usuario/login`, {
       username,
       password,
     });
+    console.log(response)
     return response.data.data;
   }
 

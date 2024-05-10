@@ -1,12 +1,13 @@
-const { db } = require("../../../../utils/utils.helpers");
+const { db } = require("../../database/conexion");
+
 const PDFDocument = require("pdfkit");
 const mysql = require("mysql2/promise");
 const excel = require("excel4node");
 const fs = require("fs");
 const path = require("path");
-const buildPDF = require("../../../../utils/utils.pdfBuild");
-const obtenerDatosInforme = require("../../../helpers/obtenerDatosInforme");
-const buildExcel = require("../../../../utils/utils.excelBuild");
+const buildPDF = require("../../../utils/utils.pdfBuild");
+const obtenerDatosInforme = require("../../helpers/obtenerDatosInforme");
+const buildExcel = require("../../../utils/utils.excelBuild");
 
 
 
@@ -17,30 +18,31 @@ const generarReporteGeneralXLS=  async (req, res) => {
     let datosParaEnviarAConstruirXLS;
     try {
       if (activo == 3) {
-        const sql =
-          "SELECT * FROM `v_infogenerator` WHERE `articulo_estado_id` = ?";
+       
 
         const combo = [(articulo_estado_id = 3)];
         //hacer validacion del rows y ver qwue tenga contenido  con su largo
         // Ejecutar la consulta
-        [datos] = await db.promise().execute(sql, combo);
+        datos = await articuloGeneratorInfoModels.generarInforme(combo);
 
 
         datosParaEnviarAConstruirXLS = datos;
+
       } else if (activo == 1) {
-        const sql =
-          "SELECT * FROM `v_infogenerator` WHERE `articulo_estado_id` = ?";
+      
 
         const combo = [(articulo_estado_id = 1)];
         //hacer validacion del rows y ver qwue tenga contenido  con su largo
         // Ejecutar la consulta
-        [datos] = await db.promise().execute(sql, combo);
+        datos = await articuloGeneratorInfoModels.generarInforme(combo);
+
         datosParaEnviarAConstruirXLS = datos;
+
       } else if (activo === undefined || activo === null) {
-        [datos] = await db.promise().query("CALL Read_v_infogenerator()");
+        datos = await articuloGeneratorInfoModels.llamarAVista();
         // const datos = await obtenerDatosInforme();
 
-        datosParaEnviarAConstruirXLS = datos[0];
+        datosParaEnviarAConstruirXLS = datos;
       }
       const wb = new excel.Workbook();
       const ws = wb.addWorksheet("Reporte inventario");

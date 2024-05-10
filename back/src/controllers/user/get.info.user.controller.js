@@ -1,3 +1,4 @@
+const userModels = require("../../models/user.models");
 
 
 
@@ -12,10 +13,10 @@ const getInfoUser = async (req, res) => {
         });
       }
 
-      const sql = "SELECT * FROM usuario WHERE user_id = ?";
-      const [user] = await db.promise().query(sql, [user_id]);
+        const resultado = await userModels.GetInfoUser(user_id);
+     
 
-      if (user.length === 0) {
+      if (resultado.length === 0) {
         return res.status(404).json({
           status: 404,
           error: "No se encontró el usuario con el ID proporcionado",
@@ -25,11 +26,11 @@ const getInfoUser = async (req, res) => {
       const responseData = {
         status: 200,
         data: {
-          username: user[0].username,
-          password: user[0].password,
-          correo: user[0].email,
-          rol: user[0].rol,
-          estado: user[0].user_state,
+          username: resultado[0].username,
+          password: resultado[0].password,
+          correo: resultado[0].email,
+          rol: resultado[0].rol,
+          estado: resultado[0].user_state,
         },
         message: "Información personal mostrada con éxito",
       };

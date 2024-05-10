@@ -1,12 +1,15 @@
-const { db } = require("../../../../utils/utils.helpers");
+const { db } = require("../../database/conexion");
+
 const PDFDocument = require("pdfkit");
 const mysql = require("mysql2/promise");
 const excel = require("excel4node");
 const fs = require("fs");
 const path = require("path");
-const buildPDF = require("../../../../utils/utils.pdfBuild");
-const obtenerDatosInforme = require("../../../helpers/obtenerDatosInforme");
-const buildExcel = require("../../../../utils/utils.excelBuild");
+const buildPDF = require("../../../utils/utils.pdfBuild");
+const obtenerDatosInforme = require("../../helpers/obtenerDatosInforme");
+const articuloGeneratorInfoModels = require("../../models/articulo.generator.info.models");
+
+
 
 
 
@@ -18,29 +21,29 @@ const generarReporteGeneralPDF = async (req, res) => {
 
     try {
       if (activo == 3) {
-        const sql =
-          "SELECT * FROM `v_infogenerator` WHERE `articulo_estado_id` = ?";
-
+    
         const combo = [(articulo_estado_id = 3)];
-        //hacer validacion del rows y ver qwue tenga contenido  con su largo
-        // Ejecutar la consulta
-        [datos] = await db.promise().execute(sql, combo);
+   
+        datos = await articuloGeneratorInfoModels.generarInforme(combo);
 
         datosParaEnviarAConstruirPDF = datos;
+
       } else if (activo == 1) {
-        const sql =
-          "SELECT * FROM `v_infogenerator` WHERE `articulo_estado_id` = ?";
+     
 
         const combo = [(articulo_estado_id = 1)];
         //hacer validacion del rows y ver qwue tenga contenido  con su largo
         // Ejecutar la consulta
-        [datos] = await db.promise().execute(sql, combo);
-        datosParaEnviarAConstruirPDF = datos;
-      } else if (activo === undefined || activo === null) {
-        [datos] = await db.promise().query("CALL Read_v_infogenerator()");
-        // const datos = await obtenerDatosInforme();
+       datos = await articuloGeneratorInfoModels.generarInforme(combo);
 
-        datosParaEnviarAConstruirPDF = datos[0];
+        datosParaEnviarAConstruirPDF = datos;
+        
+      } else if (activo === undefined || activo === null) {
+      
+        datos = await articuloGeneratorInfoModels.llamarAVista();
+    
+
+        datosParaEnviarAConstruirPDF = datos;
       }
 
       console.log("datos para enviar a buildPdf", datosParaEnviarAConstruirPDF);

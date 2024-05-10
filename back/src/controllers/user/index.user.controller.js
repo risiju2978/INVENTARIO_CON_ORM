@@ -1,6 +1,5 @@
 require("dotenv").config();
 
-const { db } = require("../../../../utils/utils.helpers");
 const bcrypt = require("bcrypt");
 
 

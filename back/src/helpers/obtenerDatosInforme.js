@@ -1,4 +1,4 @@
-const { db } = require("../../utils/utils.helpers");
+const { db } = require("../database/conexion");
 
 async function obtenerDatosInforme(
   fechaInicio,
