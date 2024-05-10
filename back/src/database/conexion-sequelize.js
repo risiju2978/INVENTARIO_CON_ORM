@@ -14,13 +14,13 @@
   const modelDefiners = [];
   
   // Leemos todos los archivos de la carpeta Models, los requerimos y agregamos al arreglo modelDefiners
-  fs.readdirSync(path.join(__dirname, "../models/orm"))
+  fs.readdirSync(path.join(__dirname, "../models"))
     .filter(
       (file) =>
         file.indexOf(".") !== 0 && file !== basename && file.slice(-3) === ".js"
     )
     .forEach((file) => {
-      modelDefiners.push(require(path.join(__dirname, "../models/orm", file)));
+      modelDefiners.push(require(path.join(__dirname, "../models", file)));
     });
   
   
@@ -34,13 +34,10 @@
   
   // En sequelize.models están todos los modelos importados como propiedades
   // Para relacionarlos hacemos un destructuring
-  const { Usuario, Articulo, Articulo_Estado } = dbConnection.models;
+  const { Usuario } = dbConnection.models;
 
   // establecer las relaciones
-  Usuario.hasMany(Articulo, {foreignKey: "usuario_id"})
-  Articulo.belongsTo(Usuario, {foreignKey: "usuario_id"})
-  Articulo_Estado.hasMany(Articulo, {foreignKey: "articulo_estado_id"})
-  Articulo.belongsTo(Articulo_Estado, {foreignKey: "articulo_estado_id"})
+  
    
   module.exports = {
     ...dbConnection.models, 

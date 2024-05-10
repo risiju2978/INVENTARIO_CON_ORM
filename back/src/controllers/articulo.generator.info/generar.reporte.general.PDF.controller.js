@@ -7,8 +7,6 @@ const fs = require("fs");
 const path = require("path");
 const buildPDF = require("../../../utils/utils.pdfBuild");
 const obtenerDatosInforme = require("../../helpers/obtenerDatosInforme");
-const articuloGeneratorInfoModels = require("../../models/articulo.generator.info.models");
-
 
 
 
@@ -34,7 +32,12 @@ const generarReporteGeneralPDF = async (req, res) => {
         const combo = [(articulo_estado_id = 1)];
         //hacer validacion del rows y ver qwue tenga contenido  con su largo
         // Ejecutar la consulta
-       datos = await articuloGeneratorInfoModels.generarInforme(combo);
+        [datos] = await db.promise().execute(sql, combo);
+        datosParaEnviarAConstruirPDF = datos;
+        
+      } else if (activo === undefined || activo === null) {
+        [datos] = await db.promise().query("CALL Read_v_infogenerator()");
+        // const datos = await obtenerDatosInforme();
 
         datosParaEnviarAConstruirPDF = datos;
         

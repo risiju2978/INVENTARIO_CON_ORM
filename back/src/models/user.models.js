@@ -1,6 +1,57 @@
 const { db } = require("../database/conexion");
 
+const { Datatypes } = require("sequelize");
+
 const bcrypt = require("bcrypt");
+
+module.exports = (sequelize) => {
+  sequelize.define("Usuario", {
+    user_id : {
+      primaryKey: true,
+      type: Datatypes.INTEGER,
+      autoincrement: true,
+      allowNull: false,
+    },
+    campus_id: {
+      type: Datatypes.INTEGER,
+      allowNull: false,
+    },
+    rol_id: {
+      type: Datatypes.INTEGER,
+      allowNull: false,
+    },
+    username: {
+      type: Datatypes.STRING,
+      allowNull: false,
+    },
+    password: {
+      type: Datatypes.STRING,
+      allowNull: false,
+    },
+    email: {
+      type: Datatypes.STRING,
+      allowNull: false,
+      unique: true,
+    },
+    user_state: {
+      type: Datatypes.BIGINT(11),
+      allowNull: false,
+    },
+  });
+};
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 module.exports = {
   listarUser() {
@@ -75,74 +126,9 @@ module.exports = {
       (err, results) => {
         if (err) reject(err);
         else resolve(results);
-      };
-    });
-  },
+    };
 
-  LoginUser(username) {
-    return new Promise((resolve, reject) => {
-      // Consulta SQL para obtener la lista de usuarios
-      const sql = "SELECT * FROM usuario WHERE username = ?";
-      db.query(sql, [username], (err, results) => {
-        if (err) reject(err);
-        else resolve(results);
-      });
-    });
-  },
+})
 
-  GetInfoUser(user_id) {
-    return new Promise((resolve, reject) => {
-      // Consulta SQL para obtener la lista de usuarios
-      const sql = "SELECT * FROM usuario WHERE user_id = ?";
-      db.query(sql, [user_id], (err, results) => {
-        if (err) reject(err);
-        else resolve(results);
-      });
-    });
-  },
-
-  UserCheck(user_id) {
-    return new Promise((resolve, reject) => {
-      // Consulta SQL para obtener la lista de usuarios
-      const sql = "SELECT user_id FROM usuario WHERE user_id = ?";
-      db.query(sql, [user_id], (err, results) => {
-        if (err) reject(err);
-        else resolve(results);
-      });
-    });
-  },
-
-  EditarUsuario(data) {
-    return new Promise((resolve, reject) => {
-      // Consulta SQL para obtener la lista de usuarios
-      const sql =
-        "UPDATE usuario SET username=?, email=?, password=? WHERE user_id=?";
-      db.query(sql, data, (err, results) => {
-        if (err) reject(err);
-        else resolve(results);
-      });
-    });
-  },
-
-  EditarPassword(data) {
-    return new Promise((resolve, reject) => {
-      // Consulta SQL para obtener la lista de usuarios
-      const sql = "UPDATE usuario SET password=? WHERE user_id=?";
-      db.query(sql, data, (err, results) => {
-        if (err) reject(err);
-        else resolve(results);
-      });
-    });
-  },
-
-  editarRolUsuario(data){
-    return new Promise((resolve, reject) => {
-      // Consulta SQL para obtener la lista de usuarios
-      const sql = "UPDATE usuario SET rol_id=? WHERE user_id=?";
-      db.query(sql,data,(err,results)=>{
-          if(err) reject(err);
-          else resolve(results);
-      });
-  });
-}
+    }
 };
