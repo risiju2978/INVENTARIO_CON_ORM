@@ -18,7 +18,7 @@ async function testDatabase() {
   }
 }
 
-conn.sync({force: true}).then(() => {
+conn.sync({force: false}).then(() => {
   app.listen(port, () => {
     console.log("Server up", port);
   });
