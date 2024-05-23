@@ -4,7 +4,7 @@ const { DataTypes } = require("sequelize");
 const bcrypt = require("bcrypt");
 
 module.exports = (sequelize) => {
-  sequelize.define("Usuario", {
+ const Usuario = sequelize.define("Usuario", {
     user_id : {
       primaryKey: true,
       type: DataTypes.INTEGER,
@@ -41,4 +41,5 @@ module.exports = (sequelize) => {
       allowNull: false,
     },
   });
+  return Usuario;
 };
