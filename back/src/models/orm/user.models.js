@@ -9,7 +9,7 @@ module.exports = (sequelize) => {
       primaryKey: true,
       type: DataTypes.INTEGER,
       autoincrement: true,
-      allowNull: false,
+      allowNull: true,
     },
     campus_id: {
       type: DataTypes.INTEGER,
@@ -34,7 +34,7 @@ module.exports = (sequelize) => {
     },
     direccion: {
       type: DataTypes.STRING,
-      allowNull: false,
+      allowNull: true,
     },
     user_state: {
       type: DataTypes.BIGINT(11),

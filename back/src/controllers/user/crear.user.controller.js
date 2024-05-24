@@ -4,6 +4,8 @@ const { generarJWT } = require("../../../utils/utils.generar-jwt");
 
 const userModels = require("../../models/user.models");
 
+const {Usuario} = require("../../database/conexion-sequelize");
+
 
 
 const crearUsuario = async (req, res) => {
@@ -28,7 +30,7 @@ const crearUsuario = async (req, res) => {
         });
       }
 
-      const resultados = await userModels.crearUser(username, email, campus_id, rol_id, user_state, password )
+      const resultados = await Usuario.create({username, email, campus_id, rol_id, user_state, password})
 
       if(resultados){
         return res.status(400).json({
@@ -46,4 +48,4 @@ const crearUsuario = async (req, res) => {
     }
   }
 
-  module.exports ={crearUsuario };
+  module.exports ={ crearUsuario };

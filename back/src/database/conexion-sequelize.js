@@ -1,63 +1,37 @@
 
-  const { Sequelize  } = require('sequelize');
-  const fs = require("fs");
-  const path = require("path");
-  
+const { Sequelize  } = require('sequelize');
+const fs = require("fs");
+const path = require("path");
 
-  /*const dbConnection = new Sequelize('inventario_2', 'root', '12345', {
-    host: '127.0.0.1',
-    dialect: 'mysql',
-  });
-  */
 
-// Conexión inicial sin especificar la base de datos
-const sequelizeInitial = new Sequelize('', 'root', '12345', {
+const dbConnection = new Sequelize('inventario_2', 'root', 'm15126376', {
   host: '127.0.0.1',
   dialect: 'mysql',
 });
 
-const dbName = 'inventario_2';
+const basename = path.basename(__filename);
 
-const createDatabaseIfNotExists = async () => {
-  try {
-    await sequelizeInitial.query(`CREATE DATABASE IF NOT EXISTS \`${dbName}\`;`);
-    console.log(`Database ${dbName} ensured to exist`);
-  } catch (error) {
-    console.error('Unable to create the database:', error);
-  }
-};
+const modelDefiners = [];
 
-const initializeSequelize = async () => {
-  await createDatabaseIfNotExists();
-
-  const dbConnection = new Sequelize(dbName, 'root', '12345', {
-    host: '127.0.0.1',
-    dialect: 'mysql',
+// Leemos todos los archivos de la carpeta Models, los requerimos y agregamos al arreglo modelDefiners
+fs.readdirSync(path.join(__dirname, "../models/orm"))
+  .filter(
+    (file) =>
+      file.indexOf(".") !== 0 && file !== basename && file.slice(-3) === ".js"
+  )
+  .forEach((file) => {
+    modelDefiners.push(require(path.join(__dirname, "../models/orm", file)));
   });
 
-  const basename = path.basename(__filename);
-  
-  const modelDefiners = [];
-  
-  // Leemos todos los archivos de la carpeta Models, los requerimos y agregamos al arreglo modelDefiners
-  fs.readdirSync(path.join(__dirname, "../models/orm"))
-    .filter(
-      (file) =>
-        file.indexOf(".") !== 0 && file !== basename && file.slice(-3) === ".js"
-    )
-    .forEach((file) => {
-      modelDefiners.push(require(path.join(__dirname, "../models/orm", file)));
-    });
-  
-  
-  modelDefiners.forEach((model) => model(dbConnection));
-  let entries = Object.entries(dbConnection.models);
-  let capsEntries = entries.map((entry) => [
-    entry[0][0].toUpperCase() + entry[0].slice(1),
-    entry[1],
-  ]);
-  dbConnection.models = Object.fromEntries(capsEntries);
-  
+
+modelDefiners.forEach((model) => model(dbConnection));
+let entries = Object.entries(dbConnection.models);
+let capsEntries = entries.map((entry) => [
+  entry[0][0].toUpperCase() + entry[0].slice(1),
+  entry[1],
+]);
+dbConnection.models = Object.fromEntries(capsEntries);
+
   // En sequelize.models están todos los modelos importados como propiedades
   // Para relacionarlos hacemos un destructuring
   const { 
@@ -77,7 +51,7 @@ const initializeSequelize = async () => {
 
   //relacion usuario-articulo
   Usuario.hasMany(Articulo, {foreignKey:"usuario_id"})
-  Articulo.belongsTo(Usuario,{foreignKey:"usuario_id"})
+  Articulo.hasMany(Usuario,{foreignKey:"usuario_id"})
   
  //relacion articulo-articulo-estado
 Articulo_Estado.hasMany(Articulo,{foreignKey:"articulo_estado_id"})
@@ -115,7 +89,7 @@ Usuario.belongsTo(Sede,{foreignKey:"campus_id"})
 Rol.hasMany(Usuario,{foreignKey:"rol_id"})
 Usuario.belongsTo(Rol,{foreignKey:"rol_id"})
 
-return dbConnection;
+module.exports = {
+  ...dbConnection.models, 
+  conn: dbConnection, 
 };
-
-module.exports = initializeSequelize;
