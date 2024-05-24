@@ -51,7 +51,7 @@ dbConnection.models = Object.fromEntries(capsEntries);
 
   //relacion usuario-articulo
   Usuario.hasMany(Articulo, {foreignKey:"usuario_id"})
-  Articulo.hasMany(Usuario,{foreignKey:"usuario_id"})
+  Articulo.belongsTo(Usuario,{foreignKey:"usuario_id"})
   
  //relacion articulo-articulo-estado
 Articulo_Estado.hasMany(Articulo,{foreignKey:"articulo_estado_id"})

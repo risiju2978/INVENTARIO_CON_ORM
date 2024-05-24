@@ -4,7 +4,7 @@ const {conn} = require("./src/database/conexion-sequelize");
 const app = require("./src/app/app");
 
 const port = process.env.PORT || 8080;
-conn.sync({force: true}).then(() => {
+conn.sync({force: false}).then(() => {
   app.listen(port, () => {
     console.log("Server up", port);
   });

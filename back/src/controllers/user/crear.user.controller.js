@@ -4,7 +4,7 @@ const { generarJWT } = require("../../../utils/utils.generar-jwt");
 
 const userModels = require("../../models/user.models");
 
-const {Usuario} = require("../../database/conexion-sequelize");
+const {Usuario, Sede, Rol} = require("../../database/conexion-sequelize");
 
 
 
@@ -30,14 +30,29 @@ const crearUsuario = async (req, res) => {
         });
       }
 
+  const verifySedeInDataBase = await Sede.findOne({ where: { campus_id: campus_id } })
+  const verifyRolInDataBase = await Rol.findOne({where: { rol_id: rol_id} })
+
+  if (!verifyRolInDataBase && !verifySedeInDataBase) {
+    return res.status(400).json({
+       status: 400,
+      error: "no se pudo ingresar usuario"
+    })
+  }
+
       const resultados = await Usuario.create({username, email, campus_id, rol_id, user_state, password})
 
-      if(resultados){
+      if(!resultados){
         return res.status(400).json({
           status: 400,
           error: "no se pudo ingresar usuario"
         });
       }
+
+      res.status(200).json({
+        status: 200,
+        error: "Usuario creado correctamente"
+      })
 
     } catch (error) {
       console.error(error);

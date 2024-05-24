@@ -8,8 +8,9 @@ module.exports = (sequelize) => {
     user_id : {
       primaryKey: true,
       type: DataTypes.INTEGER,
-      autoincrement: true,
-      allowNull: true,
+      // en la I estaba el error
+      autoIncrement: true,
+      allowNull: false,
     },
     campus_id: {
       type: DataTypes.INTEGER,
