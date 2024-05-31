@@ -1,8 +1,6 @@
 
 const { generarJWT } = require("../../../utils/utils.generar-jwt");
-
-
-const userModels = require("../../models/user.models");
+const bcrypt = require("bcrypt");
 
 const {Usuario, Sede, Rol} = require("../../database/conexion-sequelize");
 
@@ -32,6 +30,7 @@ const crearUsuario = async (req, res) => {
 
   const verifySedeInDataBase = await Sede.findOne({ where: { campus_id: campus_id } })
   const verifyRolInDataBase = await Rol.findOne({where: { rol_id: rol_id} })
+  const verifyEmailInDataBase = await Usuario.findOne({where: {email: email}})
 
   if (!verifyRolInDataBase && !verifySedeInDataBase) {
     return res.status(400).json({
@@ -40,7 +39,17 @@ const crearUsuario = async (req, res) => {
     })
   }
 
-      const resultados = await Usuario.create({username, email, campus_id, rol_id, user_state, password})
+  if (verifyEmailInDataBase) {
+    return res.status(400).json({
+      status: 400,
+      error: "El email ya se encuentra registrado"
+    })
+  }
+        const salt = bcrypt.genSaltSync();
+
+        const passWordEncripted = bcrypt.hashSync(password, salt);
+
+      const resultados = await Usuario.create({username, email, campus_id, rol_id, user_state, password: passWordEncripted})
 
       if(!resultados){
         return res.status(400).json({

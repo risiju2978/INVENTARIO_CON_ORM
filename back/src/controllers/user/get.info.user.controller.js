@@ -1,5 +1,5 @@
 const userModels = require("../../models/user.models");
-
+const {Usuario} = require("../../database/conexion-sequelize");
 
 
 const getInfoUser = async (req, res) => {
@@ -13,7 +13,7 @@ const getInfoUser = async (req, res) => {
         });
       }
 
-        const resultado = await userModels.GetInfoUser(user_id);
+        const resultado = await Usuario.findAll({where: {user_id: user_id}})
      
 
       if (resultado.length === 0) {

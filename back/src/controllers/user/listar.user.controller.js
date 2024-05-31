@@ -1,10 +1,11 @@
 const userModel = require("../../models/user.models")
+const {Usuario} = require("../../database/conexion-sequelize");
 
 
 const listarUsuarios = async(req, res) => {
     try {
     
-      const resultados = await userModel.listarUser();
+      const resultados = await Usuario.findAll();
 
       if(resultados.length === 0){
         return res.status(404).json({
